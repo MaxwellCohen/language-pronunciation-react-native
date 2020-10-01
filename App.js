@@ -1,8 +1,7 @@
 import 'react-native-gesture-handler';
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {View, Text} from 'react-native';
 import * as Font from 'expo-font';
-import {AppLoading} from 'expo';
 
 import {createStore, combineReducers, applyMiddleware} from 'redux';
 import {Provider as ReduxProvider} from 'react-redux';
@@ -11,12 +10,16 @@ import ReduxThunk from 'redux-thunk';
 import token from './store/token/token.reducer';
 import permission from './store/permissions/permissions.reducer';
 import recordings from './store/recordings/recording.reducer';
+import language from './store/language/language.reducer';
+import whatToSay from './store/whatToSay/whatToSay.reducer';
 import Nav from './navigation/Nav';
 
 const rootReducer = combineReducers({
   token: token,
   permission: permission,
   recordings: recordings,
+  language: language,
+  whatToSay: whatToSay,
 });
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));

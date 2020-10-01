@@ -21,8 +21,7 @@ const Header = ({title}) => {
 const styles = StyleSheet.create({
   headerBase: {
     width: '100%',
-    height: 90,
-    paddingTop: 36,
+    height: 50,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -32,10 +31,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   HeaderAndroid: {
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.blue,
   },
   headerTitle: {
-    color: Platform.OS === 'android' ? 'white' : Colors.primary,
+    color: Platform.OS === 'android' ? 'white' : Colors.blue,
     fontSize: 18,
   },
 });

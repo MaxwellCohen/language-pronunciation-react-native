@@ -1,6 +1,6 @@
 import React, {useCallback} from 'react';
 import {StyleSheet, View} from 'react-native';
-import MainButton from './MainButton';
+import MainButton from './common/MainButton';
 import {useSelector, useDispatch} from 'react-redux';
 import * as Actions from '../store/recordings/recordings.actions';
 import Colors from '../constants/colors';

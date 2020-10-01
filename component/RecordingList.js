@@ -1,10 +1,14 @@
 import React from 'react';
-import {StyleSheet, View, TouchableOpacity} from 'react-native';
-import Sound from 'react-native-sound';
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import Card from './common/Card';
 import BodyText from './common/BodyText';
 import {useSelector, useDispatch} from 'react-redux';
-import Icon from 'react-native-vector-icons/Ionicons';
+import PlayButton from './common/PlayButton';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import Colors from '../constants/colors';
 import * as recordingActions from '../store/recordings/recordings.actions';
@@ -17,7 +21,6 @@ const RecordingList = () => {
     if (!sound) {
       return null;
     }
-    Sound.setCategory('Playback');
     sound.play((success) => {
       if (success) {
         console.log('successfully finished playing');
@@ -60,15 +63,13 @@ const RecordingList = () => {
         <View style={styles.row}>
           <View style={styles.text}>
             {item.processing ? (
-              <BodyText>tying to figure out what you said: </BodyText>
+              <ActivityIndicator size="small" color={Colors.blue} />
             ) : (
               <BodyText>{item.whatIsSaid}</BodyText>
             )}
           </View>
           <View style={[styles.playbackButton]}>
-            <TouchableOpacity onPress={() => playSound(item)}>
-              <Icon name="play" size={24} />
-            </TouchableOpacity>
+            <PlayButton onPress={() => playSound(item)} />
           </View>
         </View>
       </Card>
