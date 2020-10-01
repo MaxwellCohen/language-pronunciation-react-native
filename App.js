@@ -1,53 +1,62 @@
-import React, {useEffect} from 'react';
-import {StyleSheet, View, Button, Text} from 'react-native';
-import useRecorder from './hooks/useRecorder';
-import useSpeechToText from './hooks/useSpeechToText';
+import 'react-native-gesture-handler';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, View, Text} from 'react-native';
+import * as Font from 'expo-font';
+import {AppLoading} from 'expo';
+
+import {createStore, combineReducers, applyMiddleware} from 'redux';
+import {Provider as ReduxProvider} from 'react-redux';
+import ReduxThunk from 'redux-thunk';
+
+import token from './store/token/token.reducer';
+import permission from './store/permissions/permissions.reducer';
+import recordings from './store/recordings/recording.reducer';
+import Nav from './navigation/Nav';
+
+const rootReducer = combineReducers({
+  token: token,
+  permission: permission,
+  recordings: recordings,
+});
+
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
+
+const fetchFonts = async () => {
+  return Font.loadAsync({
+    'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
+    'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
+  });
+};
 
 const App = () => {
-  const [
-    start,
-    stop,
-    play,
-    pause,
-    paused,
-    audioFile,
-    recording,
-  ] = useRecorder();
-
-  const [sstResult, sstFromFile] = useSpeechToText();
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   useEffect(() => {
-    if (audioFile) {
-      console.log('start sst');
-      sstFromFile(audioFile);
-    }
-  }, [audioFile, sstFromFile]);
+    fetchFonts()
+      .then(() => {
+        setDataLoaded(true);
+      })
+      .catch(() => {
+        setDataLoaded(true);
+      });
+  }, []);
+
+  if (!dataLoaded) {
+    console.log('waiting to load data ');
+    return (
+      <View>
+        <Text> loading data</Text>
+      </View>
+    );
+  }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.row}>
-        <Button onPress={start} title="Record" disabled={recording} />
-        <Button onPress={stop} title="Stop" disabled={!recording} />
-        {paused ? (
-          <Button onPress={play} title="Play" disabled={!audioFile} />
-        ) : (
-          <Button onPress={pause} title="Pause" disabled={!audioFile} />
-        )}
-      </View>
-      <Text>{sstResult}</Text>
-    </View>
+    <ReduxProvider store={store}>
+      <Nav />
+    </ReduxProvider>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-  },
-});
+// const styles = StyleSheet.create({});
 
 export default App;

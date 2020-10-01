@@ -10,6 +10,8 @@ target 'rnlpt3' do
 
   pod 'RNBinaryFile', :path => '../node_modules/react-native-binary-file'
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
   target 'rnlpt3Tests' do
     inherit! :complete
     # Pods for testing
