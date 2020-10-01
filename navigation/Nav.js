@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
 import RecorderScreen from '../screens/RecorderScreen';

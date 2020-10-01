@@ -1,5 +1,5 @@
 import React, {useCallback} from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import MainButton from './MainButton';
 import {useSelector, useDispatch} from 'react-redux';
 import * as Actions from '../store/recordings/recordings.actions';
