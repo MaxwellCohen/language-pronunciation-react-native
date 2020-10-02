@@ -1,4 +1,4 @@
-import speechAPI from '../../api/speech';
+import {translate, tts} from '../../api/speech';
 import RNFS from 'react-native-fs';
 import {loadAudio} from '../../util/sound';
 
@@ -44,9 +44,7 @@ export const updateAll = ({
 
 export const newTranslation = ({text, to, from}) => async (dispatch) => {
   try {
-    const {data} = await speechAPI.get('/translate', {
-      params: {text, to, from},
-    });
+    const {data} = await translate({text, to, from});
     dispatch({
       type: SET_TRANSLATION_INFO,
       payload: {
@@ -62,9 +60,7 @@ export const newTranslation = ({text, to, from}) => async (dispatch) => {
 
 export const newText = ({text, to, from}) => async (dispatch) => {
   try {
-    const {data} = await speechAPI.get('/translate', {
-      params: {text, to, from},
-    });
+    const {data} = await translate({text, to, from});
     dispatch({
       type: SET_TRANSLATION_INFO,
       payload: {
@@ -87,13 +83,10 @@ export const updateSound = (voice, translation) => async (
     return;
   }
   const lang = voice.split('-').slice(0, 2).join('-');
-  const {data} = await speechAPI.get('/tts', {
-    params: {
-      text: translation,
-      lang: lang,
-      voice: voice,
-    },
-    headers: {Accept: 'text/plain'},
+  const {data} = await tts({
+    text: translation,
+    lang,
+    voice,
   });
   let audioFile;
   if (data.startsWith('tts')) {

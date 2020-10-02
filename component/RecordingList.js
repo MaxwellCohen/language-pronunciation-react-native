@@ -12,9 +12,13 @@ import PlayButton from './common/PlayButton';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import Colors from '../constants/colors';
 import * as recordingActions from '../store/recordings/recordings.actions';
+import {removePunctuation} from '../util/removePunctuation';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const RecordingList = () => {
   const recordings = useSelector((state) => state.recordings.recordings);
+  const {translation} = useSelector((state) => state.whatToSay);
+
   const dispatch = useDispatch();
 
   const playSound = ({sound}) => {
@@ -34,6 +38,13 @@ const RecordingList = () => {
     if (rowMap[rowKey]) {
       rowMap[rowKey].closeRow();
     }
+  };
+
+  const compare = (t1, t2) => {
+    return (
+      removePunctuation(t1).toLowerCase() ===
+      removePunctuation(t2).toLowerCase()
+    );
   };
 
   const deleteRecording = (recording) => {
@@ -58,6 +69,7 @@ const RecordingList = () => {
     </View>
   );
   const renderItems = ({item}) => {
+    const correct = compare(item.whatIsSaid?.text, translation);
     return (
       <Card>
         <View style={styles.row}>
@@ -65,7 +77,24 @@ const RecordingList = () => {
             {item.processing ? (
               <ActivityIndicator size="small" color={Colors.blue} />
             ) : (
-              <BodyText>{item.whatIsSaid}</BodyText>
+              <View style={styles.rowStart}>
+                <View>
+                  {correct ? (
+                    <Icon
+                      name="checkmark-circle"
+                      size={24}
+                      color={Colors.green}
+                    />
+                  ) : null}
+                </View>
+                <View>
+                  <BodyText>{item.whatIsSaid?.text}</BodyText>
+                  <BodyText style={styles.helperText}>
+                    {item.whatIsSaid?.textTransliteration}-
+                    {item.whatIsSaid?.translation}
+                  </BodyText>
+                </View>
+              </View>
             )}
           </View>
           <View style={[styles.playbackButton]}>
@@ -97,7 +126,12 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
     marginVertical: 1,
-    // width: '100%',
+  },
+  rowStart: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginVertical: 1,
   },
   playbackButton: {},
   text: {
@@ -139,6 +173,9 @@ const styles = StyleSheet.create({
   backRightBtnRight: {
     backgroundColor: Colors.red,
     right: 0,
+  },
+  helperText: {
+    fontSize: 10,
   },
 });
 

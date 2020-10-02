@@ -1,5 +1,6 @@
 /*global SpeechSDK*/
 import AudioRecord from 'react-native-audio-record';
+import {translate} from '../../api/speech';
 import {BinaryFile} from 'react-native-binary-file';
 import RNFS, {stat} from 'react-native-fs';
 import {loadAudio} from '../../util/sound';
@@ -74,7 +75,7 @@ export const startRecording = () => {
 
 export const stopRecording = () => async (dispatch, getState) => {
   const token = getState()?.token?.token;
-  const voice = getState()?.language?.voice;
+  const language = getState()?.language;
   const {id, recording} = latestRecording(getState);
 
   if (!recording) {
@@ -92,7 +93,7 @@ export const stopRecording = () => async (dispatch, getState) => {
   });
 
   try {
-    await sst(audioFile, token, voice, dispatch);
+    await sst(audioFile, token, language, dispatch);
   } catch (e) {
     console.error(e);
   }
@@ -129,7 +130,8 @@ const latestRecording = (getState) => {
   return recordings.recordings[recordings.recordings.length - 1] || {};
 };
 
-const sst = async (fileName, token, voice, dispatch) => {
+const sst = async (fileName, token, language, dispatch) => {
+  const {voice, userLanguage, learningLanguage} = language;
   if (fileName && token) {
     dispatch(startStt(fileName));
     try {
@@ -143,21 +145,26 @@ const sst = async (fileName, token, voice, dispatch) => {
         .slice(0, 2)
         .join('-');
       const reco = new SpeechSDK.SpeechRecognizer(speechConfig, audioConfig);
-      reco.recognized = (s, e) => {
+      reco.recognized = async (s, e) => {
         const text = e?.result?.text;
-        dispatch(endStt(fileName, text));
+        const {data} = await translate({
+          text,
+          to: userLanguage,
+          from: learningLanguage,
+        });
+        dispatch(endStt(fileName, data));
         reco.close();
       };
 
       reco.recognizeOnceAsync(
         () => {},
         (e) => {
-          dispatch(endStt(fileName, ''));
+          dispatch(endStt(fileName, {}));
           console.error(e);
         },
       );
     } catch (e) {
-      dispatch(endStt(fileName, ''));
+      dispatch(endStt(fileName, {}));
     }
   }
 };
