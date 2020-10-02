@@ -9,7 +9,6 @@ import SettingScreen, {
   navigationOptions as SettingScreenOptions,
 } from '../screens/SettingScreen';
 import {useDispatch} from 'react-redux';
-
 import {createStackNavigator} from '@react-navigation/stack';
 import * as tokenActions from '../store/token/token.actions';
 import * as permissionActions from '../store/permissions/permissions.actions';
