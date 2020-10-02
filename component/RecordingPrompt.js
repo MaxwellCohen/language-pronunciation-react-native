@@ -1,21 +1,31 @@
-import React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import React, {useEffect} from 'react';
+import {StyleSheet, View} from 'react-native';
+
 import BodyText from './common/BodyText';
 import Input from './common/Input';
 import Card from './common/Card';
+
 import {useSelector, useDispatch} from 'react-redux';
 import * as whatToSayActions from '../store/whatToSay/whatToSay.actions';
 import PlayButton from './common/PlayButton';
 
 const RecordingPrompt = () => {
-  const {text, transliteration, translation} = useSelector(
+  const {text, transliteration, translation, sound} = useSelector(
     (state) => state.whatToSay,
   );
-  const {userLanguage, learningLanguage} = useSelector(
+
+  const {userLanguage, learningLanguage, voice} = useSelector(
     (state) => state.language,
   );
 
+  useEffect(() => {
+    if (text && translation) {
+      dispatch(whatToSayActions.updateSound(voice, translation));
+    }
+  }, [text, translation, voice, dispatch]);
+
   const dispatch = useDispatch();
+
   const newTranslation = () => {
     dispatch(
       whatToSayActions.newTranslation({
@@ -25,6 +35,7 @@ const RecordingPrompt = () => {
       }),
     );
   };
+
   const newText = () => {
     dispatch(
       whatToSayActions.newText({
@@ -35,22 +46,35 @@ const RecordingPrompt = () => {
     );
   };
 
+  const play = async () => {
+    console.log('start playing');
+    if (sound) {
+      sound.play();
+    }
+  };
+
   return (
     <View>
       <Card>
         <View style={styles.row}>
-          <BodyText>I would like to say</BodyText>
-          <PlayButton onPress={() => {}} />
+          <BodyText>I would like to say: </BodyText>
+          <PlayButton
+            onPress={() => {
+              play();
+            }}
+            sound={sound}
+            blank={!(translation && text)}
+          />
         </View>
         <Input
           value={text}
-          onChangeText={(t) => dispatch(whatToSayActions.updateText(t))}
+          onChangeText={(t) => dispatch(whatToSayActions.setText(t))}
           onBlur={newText}
         />
-        <BodyText>Please say</BodyText>
+        <BodyText>Please say: </BodyText>
         <Input
           value={translation}
-          onChangeText={(t) => dispatch(whatToSayActions.updateTranslation(t))}
+          onChangeText={(t) => dispatch(whatToSayActions.setTranslation(t))}
           onBlur={newTranslation}
         />
         <BodyText style={styles.helperText}>{transliteration}</BodyText>
@@ -62,7 +86,6 @@ const RecordingPrompt = () => {
 const styles = StyleSheet.create({
   helperText: {
     fontSize: 12,
-    // marginTop: -10,
   },
   row: {
     flexDirection: 'row',

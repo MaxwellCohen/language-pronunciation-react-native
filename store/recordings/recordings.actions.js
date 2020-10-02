@@ -1,9 +1,9 @@
 /*global SpeechSDK*/
 import AudioRecord from 'react-native-audio-record';
 import {BinaryFile} from 'react-native-binary-file';
-var RNFS = require('react-native-fs');
-import {stat} from 'react-native-fs';
-import Sound from 'react-native-sound';
+import RNFS, {stat} from 'react-native-fs';
+import {loadAudio} from '../../util/sound';
+
 require('../../polyfiles/fileReader');
 require('../../node_modules/microsoft-cognitiveservices-speech-sdk/distrib/browser/microsoft.cognitiveservices.speech.sdk.bundle.js');
 
@@ -15,6 +15,7 @@ export const START_STT = 'START_STT';
 export const END_STT = 'END_STT';
 export const ADD_SOUND = 'ADD_SOUND';
 export const DELETE_RECORDING = 'DELETE_RECORDING';
+/*
 
 const model = {
   id: '',
@@ -24,6 +25,8 @@ const model = {
   processing: false,
   sound: null,
 };
+
+*/
 
 export const deleteRecording = ({id, audioFile}) => async (dispach) => {
   try {
@@ -70,7 +73,8 @@ export const startRecording = () => {
 };
 
 export const stopRecording = () => async (dispatch, getState) => {
-  const token = getState().token.token;
+  const token = getState()?.token?.token;
+  const voice = getState()?.language?.voice;
   const {id, recording} = latestRecording(getState);
 
   if (!recording) {
@@ -88,7 +92,7 @@ export const stopRecording = () => async (dispatch, getState) => {
   });
 
   try {
-    await sst(audioFile, token, dispatch);
+    await sst(audioFile, token, voice, dispatch);
   } catch (e) {
     console.error(e);
   }
@@ -125,8 +129,7 @@ const latestRecording = (getState) => {
   return recordings.recordings[recordings.recordings.length - 1] || {};
 };
 
-const sst = async (fileName, token, dispatch) => {
-  const voice = 'en-US-Kangkang-Apollo';
+const sst = async (fileName, token, voice, dispatch) => {
   if (fileName && token) {
     dispatch(startStt(fileName));
     try {
@@ -168,20 +171,4 @@ const createConfig = async (fileName) => {
   pushStream.close();
   const audioConfig = SpeechSDK.AudioConfig.fromStreamInput(pushStream);
   return audioConfig;
-};
-
-const loadAudio = (audioFile) => {
-  return new Promise((resolve, reject) => {
-    if (!audioFile) {
-      return reject('file path is empty');
-    }
-    console.log(audioFile);
-    const sound = new Sound(audioFile, '', (error) => {
-      if (error) {
-        console.log('failed to load the file', error);
-        return reject(error);
-      }
-      return resolve(sound);
-    });
-  });
 };

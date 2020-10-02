@@ -69,7 +69,7 @@ const RecordingList = () => {
             )}
           </View>
           <View style={[styles.playbackButton]}>
-            <PlayButton onPress={() => playSound(item)} />
+            <PlayButton onPress={() => playSound(item)} sound={item.sound} />
           </View>
         </View>
       </Card>
