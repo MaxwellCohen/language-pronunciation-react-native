@@ -9,18 +9,36 @@ const TextOrPicker = ({value, options, onValueChange}) => {
       {!options?.length ? (
         <BodyText>{value}</BodyText>
       ) : (
-        <Picker
-          selectedValue={value}
-          style={{height: 50, width: '100%'}}
-          onValueChange={onValueChange}>
-          {options.map((item) => (
-            <Picker.Item label={item.name} value={item.code} />
-          ))}
-        </Picker>
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={value}
+            style={styles.picker}
+            onValueChange={onValueChange}>
+            {options.map((item) => (
+              <Picker.Item
+                label={item.name}
+                value={item.code}
+                key={item.code}
+              />
+            ))}
+          </Picker>
+        </View>
       )}
     </View>
   );
 };
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  picker: {
+    height: 50,
+    width: '100%',
+    borderBottomColor: 'grey',
+    borderBottomWidth: 2,
+    paddingHorizontal: 0,
+  },
+  pickerContainer: {
+    borderBottomColor: 'grey',
+    borderBottomWidth: 1,
+  },
+});
 
 export default TextOrPicker;
