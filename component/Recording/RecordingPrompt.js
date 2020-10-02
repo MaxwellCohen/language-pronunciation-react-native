@@ -1,13 +1,13 @@
 import React, {useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 
-import BodyText from './common/BodyText';
-import Input from './common/Input';
-import Card from './common/Card';
+import BodyText from '../common/BodyText';
+import Input from '../common/Input';
+import Card from '../common/Card';
 
 import {useSelector, useDispatch} from 'react-redux';
-import * as whatToSayActions from '../store/whatToSay/whatToSay.actions';
-import PlayButton from './common/PlayButton';
+import * as whatToSayActions from '../../store/whatToSay/whatToSay.actions';
+import PlayButton from '../common/PlayButton';
 
 const RecordingPrompt = () => {
   const {text, transliteration, translation, sound} = useSelector(

@@ -1,14 +1,14 @@
 import React from 'react';
 import {StyleSheet, View, Text, ActivityIndicator} from 'react-native';
-import Card from './common/Card';
+import Card from '../common/Card';
 import Icon from 'react-native-vector-icons/Ionicons';
-import PlayButton from './common/PlayButton';
-import Colors from '../constants/colors';
-import BodyText from './common/BodyText';
+import PlayButton from '../common/PlayButton';
+import Colors from '../../constants/colors';
+import RecordingInfo from './RecordingInfo';
 
 const RecordingListItem = ({item, correct, playSound}) => {
   return (
-    <Card>
+    <Card style={styles.card}>
       <View style={styles.row}>
         <View style={styles.text}>
           {item?.processing ? (
@@ -24,13 +24,7 @@ const RecordingListItem = ({item, correct, playSound}) => {
                   />
                 ) : null}
               </View>
-              <View>
-                <BodyText>{item?.whatIsSaid?.text}</BodyText>
-                <BodyText style={styles.helperText}>
-                  {item?.whatIsSaid?.textTransliteration}-
-                  {item?.whatIsSaid?.translation}
-                </BodyText>
-              </View>
+              <RecordingInfo whatIsSaid={item?.whatIsSaid} />
             </View>
           )}
         </View>
@@ -43,6 +37,10 @@ const RecordingListItem = ({item, correct, playSound}) => {
 };
 
 const styles = StyleSheet.create({
+  card: {
+    overflow: 'hidden',
+    marginTop: 10,
+  },
   row: {
     flexDirection: 'row',
     justifyContent: 'flex-end',

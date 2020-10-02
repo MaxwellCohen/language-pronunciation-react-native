@@ -1,8 +1,9 @@
 import * as Actions from './whatToSay.actions';
+import * as languageActions from '../language/language.actions';
 const initial_state = {
-  text: 'hello',
-  transliteration: 'Nǐ hǎo',
-  translation: '你好',
+  text: '',
+  transliteration: '',
+  translation: '',
   sound: null,
   audioFile: null,
 };
@@ -33,6 +34,10 @@ export default (state = initial_state, action) => {
         ...state,
         ...action.payload,
       };
+    case languageActions.SET_USER_LANGUAGE:
+      return initial_state;
+    case languageActions.SET_LEARNING_LANGUAGE:
+      return initial_state;
     default:
       return state;
   }

@@ -1,11 +1,12 @@
 import React from 'react';
 import {StyleSheet, View, TouchableOpacity} from 'react-native';
-import BodyText from './common/BodyText';
-import * as recordingActions from '../store/recordings/recordings.actions';
+import BodyText from '../common/BodyText';
+import * as recordingActions from '../../store/recordings/recordings.actions';
 import {useDispatch} from 'react-redux';
-import Colors from '../constants/colors';
+import Colors from '../../constants/colors';
+import RecordingInfo from './RecordingInfo';
 
-const RecordingListItemHiden = ({rowMap, data}) => {
+const RecordingListItemHidden = ({rowMap, item}) => {
   const dispatch = useDispatch();
 
   const deleteRecording = (recording) => {
@@ -20,16 +21,15 @@ const RecordingListItemHiden = ({rowMap, data}) => {
 
   return (
     <View style={styles.rowBack}>
-      <BodyText>Left</BodyText>
       <TouchableOpacity
         style={[styles.backRightBtn, styles.backRightBtnLeft]}
-        onPress={() => closeRow(rowMap, data.item.id)}>
+        onPress={() => closeRow(rowMap, item.id)}>
         <BodyText style={styles.backTextWhite}>Close</BodyText>
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.backRightBtn, styles.backRightBtnRight]}
         onPress={() => {
-          deleteRecording(data.item);
+          deleteRecording(item);
         }}>
         <BodyText style={styles.backTextWhite}>Delete</BodyText>
       </TouchableOpacity>
@@ -38,12 +38,6 @@ const RecordingListItemHiden = ({rowMap, data}) => {
 };
 
 const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
-    marginVertical: 1,
-  },
   text: {
     flex: 1,
     alignSelf: 'center',
@@ -53,19 +47,21 @@ const styles = StyleSheet.create({
   },
   rowBack: {
     alignItems: 'center',
-    backgroundColor: '#DDD',
+    backgroundColor: 'transparent',
+    marginTop: 10,
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingLeft: 15,
+    borderRadius: 5,
+    overflow: 'hidden',
   },
   backRightBtn: {
     alignItems: 'center',
-    bottom: 0,
     justifyContent: 'center',
     position: 'absolute',
     top: 0,
     width: 75,
+    bottom: 0,
   },
   backRightBtnLeft: {
     backgroundColor: Colors.blue,
@@ -77,4 +73,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RecordingListItemHiden;
+export default RecordingListItemHidden;

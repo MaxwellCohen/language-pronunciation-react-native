@@ -1,4 +1,5 @@
 import * as Actions from './recordings.actions';
+import * as languageActions from '../language/language.actions';
 
 const initial_state = {
   recordings: [],
@@ -18,6 +19,10 @@ export default (state = initial_state, action) => {
       return addSound(state, action);
     case Actions.DELETE_RECORDING:
       return deleteRecording(state, action);
+    case languageActions.SET_USER_LANGUAGE:
+      return initial_state;
+    case languageActions.SET_LEARNING_LANGUAGE:
+      return initial_state;
     default:
       return state;
   }

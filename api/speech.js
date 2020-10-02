@@ -24,4 +24,6 @@ export const tts = ({text, lang, voice}) => {
   });
 };
 
+export const languageSuportData = () => speechAPI.get('/languageSuportData');
+
 export default speechAPI;

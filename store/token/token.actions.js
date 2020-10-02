@@ -19,9 +19,8 @@ export const getToken = () => async (dispatch) => {
   dispatch(resetToken());
   try {
     const request = await speechApi.get('/token');
-    console.log('token set to', request?.data?.token);
     dispatch(setToken(request?.data?.token));
   } catch (e) {
-    console.log('token error', e);
+    console.error('token error', e);
   }
 };
