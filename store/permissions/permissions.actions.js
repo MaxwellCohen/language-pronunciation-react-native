@@ -6,7 +6,6 @@ export const checkPermission = () => async (dispatch) => {
   const p = await Permissions.check(
     Permissions.PERMISSIONS.ANDROID.RECORD_AUDIO,
   );
-  console.log('permission check', p);
   if (p === 'authorized') {
     return dispatch({
       type: UPDATE_PERMISSIONS,

@@ -5,7 +5,6 @@ import {BinaryFile} from 'react-native-binary-file';
 import RNFS, {stat} from 'react-native-fs';
 import {loadAudio} from '../../util/sound';
 
-require('../../polyfiles/fileReader');
 require('../../node_modules/microsoft-cognitiveservices-speech-sdk/distrib/browser/microsoft.cognitiveservices.speech.sdk.bundle.js');
 
 export const CLEAR_RECORDINGS = 'CLEAR_RECORDINGS';

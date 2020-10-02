@@ -45,7 +45,6 @@ const App = () => {
   }, []);
 
   if (!dataLoaded) {
-    console.log('waiting to load data ');
     return (
       <View>
         <Text> loading data</Text>

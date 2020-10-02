@@ -15,7 +15,6 @@ export const resetToken = () => ({
 });
 
 export const getToken = () => async (dispatch) => {
-  console.log('resquest token');
   dispatch(resetToken());
   try {
     const request = await speechApi.get('/token');

@@ -51,7 +51,7 @@ const Nav = () => {
 
   return (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Settings">
+      <Drawer.Navigator initialRouteName="Pronunciation Tool">
         <Drawer.Screen
           name="Pronunciation Tool"
           component={RecorderScreenStackNav}
