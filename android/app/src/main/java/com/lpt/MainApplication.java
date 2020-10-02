@@ -6,9 +6,6 @@ import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.reactnativecommunity.picker.RNCPickerPackage;
 import com.zmxv.RNSound.RNSoundPackage;
-import com.zmxv.RNSound.RNSoundPackage;
-import com.johnsonsu.rnsoundplayer.RNSoundPlayerPackage;
-import com.johnsonsu.rnsoundplayer.RNSoundPlayerPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import ez.react.binary.RNBinaryFilePackage;
 import com.facebook.react.ReactInstanceManager;
@@ -17,6 +14,7 @@ import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+
 
 
 public class MainApplication extends Application implements ReactApplication {
