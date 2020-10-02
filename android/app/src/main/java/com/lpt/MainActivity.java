@@ -1,4 +1,4 @@
-package com.rnlpt3;
+package com.lpt;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "rnlpt3";
+    return "LPT";
   }
 }

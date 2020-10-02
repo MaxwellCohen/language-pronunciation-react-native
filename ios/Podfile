@@ -3,7 +3,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '10.0'
 
-target 'rnlpt3' do
+target 'LPT' do
   config = use_native_modules!
 
   use_react_native!(:path => config["reactNativePath"])
@@ -18,7 +18,7 @@ target 'rnlpt3' do
 
   pod 'RNCPicker', :path => '../node_modules/@react-native-community/picker'
 
-  target 'rnlpt3Tests' do
+  target 'LPTTests' do
     inherit! :complete
     # Pods for testing
   end
@@ -33,10 +33,10 @@ target 'rnlpt3' do
   end
 end
 
-target 'rnlpt3-tvOS' do
-  # Pods for rnlpt3-tvOS
+target 'LPT-tvOS' do
+  # Pods for LPT-tvOS
 
-  target 'rnlpt3-tvOSTests' do
+  target 'LPT-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
   end
