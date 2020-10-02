@@ -2,9 +2,9 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import Card from '../component/common/Card';
 import Header from '../component/common/Header';
-import RecordingControls from '../component/RecordingControls';
-import RecordingList from '../component/RecordingList';
-import RecordingPrompt from '../component/RecordingPrompt';
+import RecordingControls from '../component/Recording/RecordingControls';
+import RecordingList from '../component/Recording/RecordingList';
+import RecordingPrompt from '../component/Recording/RecordingPrompt';
 
 const RecorderScreen = () => {
   return (
