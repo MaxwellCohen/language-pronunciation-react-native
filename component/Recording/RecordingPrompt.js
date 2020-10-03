@@ -86,6 +86,7 @@ const RecordingPrompt = () => {
 const styles = StyleSheet.create({
   helperText: {
     fontSize: 12,
+
   },
   row: {
     flexDirection: 'row',

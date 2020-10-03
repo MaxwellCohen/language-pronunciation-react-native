@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@expo/browser-polyfill": "^0.1.0",
+    "@react-native-community/async-storage": "1.12.0",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-community/picker": "1.8.0",
     "@react-navigation/drawer": "^5.9.2",
@@ -18,11 +19,6 @@
     "@react-navigation/stack": "5.9.2",
     "axios": "^0.20.0",
     "buffer": "^5.6.0",
-    "dayjs": "^1.9.1",
-    "expo": "^39.0.3",
-    "expo-file-system": "9.2.0",
-    "expo-font": "^8.3.0",
-    "fast-b64": "0.0.0",
     "microsoft-cognitiveservices-speech-sdk": "^1.13.1",
     "react": "^16.13.1",
     "react-native": "^0.63.3",
@@ -44,6 +40,7 @@
     "react-navigation-header-buttons": "5.0.2",
     "react-redux": "^7.2.1",
     "redux": "^4.0.5",
+    "redux-persist": "6.0.0",
     "redux-thunk": "^2.3.0",
     "rn-fetch-blob": "^0.12.0"
   },

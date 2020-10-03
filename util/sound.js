@@ -15,3 +15,14 @@ export const loadAudio = (audioFile) => {
     });
   });
 };
+
+export const promisifyPlaySound = (sound) => {
+  return new Promise((resolve, reject) => {
+    if (!sound) {
+      return resolve(false);
+    }
+    sound.play((success) => {
+      return resolve(success);
+    });
+  });
+};

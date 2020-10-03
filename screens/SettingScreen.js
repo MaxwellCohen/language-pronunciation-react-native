@@ -1,14 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, Platform} from 'react-native';
-import {HeaderButtons, Item} from 'react-navigation-header-buttons';
-import HeaderButton from '../component/common/HeaderButton';
+import {StyleSheet, View} from 'react-native';
+
 import BodyText from '../component/common/BodyText';
 import Card from '../component/common/Card';
-import {Picker} from '@react-native-community/picker';
 import {languageSuportData} from '../api/speech';
 import {useDispatch, useSelector} from 'react-redux';
 import * as languageActions from '../store/language/language.actions';
 import TextOrPicker from '../component/common/TextOrPicker';
+import HeaderLeft from '../component/common/HeaderLeft';
 
 const SettingScreen = () => {
   const [learningOptions, setLearningOptions] = useState([]);
@@ -20,14 +19,20 @@ const SettingScreen = () => {
   const dispatch = useDispatch();
 
   const setLearningLanguage = (itemValue, itemIndex) => {
-    dispatch(languageActions.setLearningLanguage(itemValue));
+    if (itemValue !== learningLanguage) {
+      dispatch(languageActions.setLearningLanguage(itemValue));
+    }
     setVoiceOptions(learningOptions[itemIndex].voices || []);
   };
   const setVoice = (itemValue) => {
-    dispatch(languageActions.setVoice(itemValue));
+    if (itemValue !== voice) {
+      dispatch(languageActions.setVoice(itemValue));
+    }
   };
   const setUserLanguage = (itemValue) => {
-    dispatch(languageActions.setUserLanguage(itemValue));
+    if (itemValue !== userLanguage) {
+      dispatch(languageActions.setUserLanguage(itemValue));
+    }
   };
 
   useEffect(() => {
@@ -74,17 +79,7 @@ const SettingScreen = () => {
 export const navigationOptions = (navData) => {
   return {
     headerTitle: 'Settings',
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButton}>
-        <Item
-          title="Menu"
-          iconName={Platform.OS === 'android' ? 'md-menu' : 'ios-menu'}
-          onPress={() => {
-            navData.navigation.toggleDrawer();
-          }}
-        />
-      </HeaderButtons>
-    ),
+    headerLeft: () => <HeaderLeft navData={navData} />,
   };
 };
 
