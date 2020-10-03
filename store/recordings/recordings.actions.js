@@ -146,12 +146,16 @@ const sst = async (fileName, token, language, dispatch) => {
       const reco = new SpeechSDK.SpeechRecognizer(speechConfig, audioConfig);
       reco.recognized = async (s, e) => {
         const text = e?.result?.text;
-        const {data} = await translate({
-          text,
-          to: userLanguage,
-          from: learningLanguage,
-        });
-        dispatch(endStt(fileName, data));
+        if (text) {
+          const {data} = await translate({
+            text,
+            to: userLanguage,
+            from: learningLanguage,
+          });
+          dispatch(endStt(fileName, data));
+        } else {
+          dispatch(endStt(fileName, {}));
+        }
         reco.close();
       };
 

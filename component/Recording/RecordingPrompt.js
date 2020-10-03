@@ -46,24 +46,15 @@ const RecordingPrompt = () => {
     );
   };
 
-  const play = async () => {
-    console.log('start playing');
-    if (sound) {
-      sound.play();
-    }
-  };
-
   return (
     <View>
       <Card>
         <View style={styles.row}>
           <BodyText>I would like to say: </BodyText>
           <PlayButton
-            onPress={() => {
-              play();
-            }}
-            sound={sound}
-            blank={!(translation && text)}
+            sounds={[sound]}
+            loading={!sound}
+            hide={!(translation && text)}
           />
         </View>
         <Input
@@ -85,8 +76,8 @@ const RecordingPrompt = () => {
 
 const styles = StyleSheet.create({
   helperText: {
-    fontSize: 12,
-
+    fontSize: 10,
+    color: '#646464',
   },
   row: {
     flexDirection: 'row',

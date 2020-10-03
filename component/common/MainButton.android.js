@@ -14,9 +14,14 @@ const MainButton = (props) => {
     ButtonComponet = TouchableNativeFeedback;
   }
 
+  const noop = () => {};
   return (
     <View style={styles.buttonContainer}>
-      <ButtonComponet onPress={props.onPress} disabled={props.disabled}>
+      <ButtonComponet
+        onPress={props.onPress || noop}
+        onPressIn={props.onPressIn || noop}
+        onPressOut={props.onPressOut || noop}
+        disabled={props.disabled}>
         <View
           style={{
             ...styles.button,
@@ -42,7 +47,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
-    fontFamily: 'open-sans',
+    // fontFamily: 'open-sans',
     fontSize: 18,
     textAlign: 'center',
   },

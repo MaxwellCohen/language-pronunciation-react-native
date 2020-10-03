@@ -1,12 +1,12 @@
 import React from 'react';
-import {StyleSheet, View, Text, ActivityIndicator} from 'react-native';
+import {StyleSheet, View, ActivityIndicator} from 'react-native';
 import Card from '../common/Card';
 import Icon from 'react-native-vector-icons/Ionicons';
 import PlayButton from '../common/PlayButton';
 import Colors from '../../constants/colors';
 import RecordingInfo from './RecordingInfo';
 
-const RecordingListItem = ({item, correct, playSound}) => {
+const RecordingListItem = ({item, correct, playSound, sstSound}) => {
   return (
     <Card style={styles.card}>
       <View style={styles.row}>
@@ -15,7 +15,7 @@ const RecordingListItem = ({item, correct, playSound}) => {
             <ActivityIndicator size="small" color={Colors.blue} />
           ) : (
             <View style={styles.rowStart}>
-              <View>
+              <View style={styles.icon}>
                 {correct ? (
                   <Icon
                     name="checkmark-circle"
@@ -29,7 +29,7 @@ const RecordingListItem = ({item, correct, playSound}) => {
           )}
         </View>
         <View style={[styles.playbackButton]}>
-          <PlayButton onPress={playSound} sound={item?.sound} />
+          <PlayButton sound={item?.sound} sounds={[sstSound, item?.sound]} />
         </View>
       </View>
     </Card>
@@ -44,15 +44,12 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    alignItems: 'flex-end',
+    alignItems: 'center',
     marginVertical: 1,
   },
   text: {
     flex: 1,
     alignSelf: 'center',
-  },
-  helperText: {
-    fontSize: 10,
   },
   playbackButton: {},
   rowStart: {
@@ -60,6 +57,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     marginVertical: 1,
+  },
+  icon: {
+    marginLeft: -5,
+    marginRight: 10,
   },
 });
 

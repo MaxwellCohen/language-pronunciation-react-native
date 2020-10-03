@@ -8,20 +8,9 @@ import RecordingListItemHidden from './RecordingListItemHidden';
 
 const RecordingList = () => {
   const recordings = useSelector((state) => state.recordings.recordings);
-  const {translation} = useSelector((state) => state.whatToSay);
-
-  const playSound = ({sound}) => {
-    if (!sound) {
-      return null;
-    }
-    sound.play((success) => {
-      if (success) {
-        console.log('successfully finished playing');
-      } else {
-        console.log('playback failed due to audio decoding errors');
-      }
-    });
-  };
+  const {translation, sound: SSTSound} = useSelector(
+    (state) => state.whatToSay,
+  );
 
   const compare = (t1, t2) =>
     removePunctuation(t1).toLowerCase() === removePunctuation(t2).toLowerCase();
@@ -33,11 +22,7 @@ const RecordingList = () => {
   const renderItems = ({item}) => {
     const correct = compare(item?.whatIsSaid?.text, translation);
     return (
-      <RecordingListItem
-        item={item}
-        playSound={() => playSound(item)}
-        correct={correct}
-      />
+      <RecordingListItem item={item} sstSound={SSTSound} correct={correct} />
     );
   };
 

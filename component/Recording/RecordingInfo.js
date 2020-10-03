@@ -7,12 +7,18 @@ const RecordingInfo = ({whatIsSaid}) => {
     <View>
       <BodyText>{whatIsSaid?.text}</BodyText>
       <BodyText style={styles.helperText}>
-        {whatIsSaid?.textTransliteration}-{whatIsSaid?.translation}
+        {whatIsSaid?.textTransliteration}
       </BodyText>
+      <BodyText style={styles.helperText}>{whatIsSaid?.translation} </BodyText>
     </View>
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  helperText: {
+    fontSize: 10,
+    color: '#646464',
+  },
+});
 
 export default RecordingInfo;
