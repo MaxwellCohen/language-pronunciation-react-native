@@ -1,11 +1,14 @@
-import Permissions from 'react-native-permissions';
+import Permissions, {PERMISSIONS} from 'react-native-permissions';
+import {Platform} from 'react-native';
 
 export const UPDATE_PERMISSIONS = 'UPDATE_PERMISSIONS';
 
 export const checkPermission = () => async (dispatch) => {
-  const p = await Permissions.check(
-    Permissions.PERMISSIONS.ANDROID.RECORD_AUDIO,
-  );
+  const cameraPermission =
+    Platform.OS === 'android'
+      ? PERMISSIONS.ANDROID.RECORD_AUDIO
+      : PERMISSIONS.IOS.CAMERA;
+  const p = await Permissions.check(cameraPermission);
   if (p === 'authorized') {
     return dispatch({
       type: UPDATE_PERMISSIONS,
@@ -14,9 +17,7 @@ export const checkPermission = () => async (dispatch) => {
       },
     });
   }
-  const pr = await Permissions.request(
-    Permissions.PERMISSIONS.ANDROID.RECORD_AUDIO,
-  );
+  const pr = await Permissions.request(cameraPermission);
   dispatch({
     type: UPDATE_PERMISSIONS,
     payload: {
