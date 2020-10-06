@@ -8,20 +8,22 @@ export const checkPermission = () => async (dispatch) => {
     Platform.OS === 'android'
       ? PERMISSIONS.ANDROID.RECORD_AUDIO
       : PERMISSIONS.IOS.CAMERA;
-  const p = await Permissions.check(cameraPermission);
-  if (p === 'authorized') {
-    return dispatch({
+  try {
+    const p = await Permissions.check(cameraPermission);
+    if (p === 'authorized') {
+      return dispatch({
+        type: UPDATE_PERMISSIONS,
+        payload: {
+          audio: true,
+        },
+      });
+    }
+    const pr = await Permissions.request(cameraPermission);
+    dispatch({
       type: UPDATE_PERMISSIONS,
       payload: {
-        audio: true,
+        audio: pr,
       },
     });
-  }
-  const pr = await Permissions.request(cameraPermission);
-  dispatch({
-    type: UPDATE_PERMISSIONS,
-    payload: {
-      audio: pr,
-    },
-  });
+  } catch (e) {}
 };

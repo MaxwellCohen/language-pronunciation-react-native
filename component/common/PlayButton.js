@@ -22,7 +22,6 @@ const PlayButton = ({loading, hide, sounds}) => {
   }
 
   const playSounds = (index = 0) => {
-    console.log(index);
     if (index < sounds.length && !stopedRef.current) {
       setPlaying(true);
       const sound = sounds[index];

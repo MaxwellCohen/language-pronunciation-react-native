@@ -28,8 +28,6 @@ const styles = StyleSheet.create({
     // overflow: 'hidden',
     borderRadius: 25,
     width: '95%',
-    borderWidth: 5,
-    borderColor: 'black',
   },
   button: {
     backgroundColor: Colors.blue,

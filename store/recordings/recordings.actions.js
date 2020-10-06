@@ -15,18 +15,6 @@ export const START_STT = 'START_STT';
 export const END_STT = 'END_STT';
 export const ADD_SOUND = 'ADD_SOUND';
 export const DELETE_RECORDING = 'DELETE_RECORDING';
-/*
-
-const model = {
-  id: '',
-  recording: false,
-  audioFile: '',
-  loaded: '',
-  processing: false,
-  sound: null,
-};
-
-*/
 
 export const deleteRecording = ({id, audioFile}) => async (dispach) => {
   try {
@@ -45,11 +33,9 @@ export const deleteRecording = ({id, audioFile}) => async (dispach) => {
   });
 };
 
-export const clearRecording = () => {
-  return {
-    type: CLEAR_RECORDINGS,
-  };
-};
+export const clearRecording = () => ({
+  type: CLEAR_RECORDINGS,
+});
 
 export const startRecording = () => {
   console.log('start recording');
