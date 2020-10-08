@@ -1,6 +1,7 @@
 import {translate, tts} from '../../api/speech';
 import RNFS from 'react-native-fs';
 import {loadAudio} from '../../util/sound';
+import { removePunctuation } from '../../util/removePunctuation';
 
 export const SET_TEXT = 'SET_TEXT';
 export const SET_TRANSLATION = 'SET_TRANSLATION';
@@ -88,11 +89,17 @@ export const updateSound = (voice, translation) => async (
     lang,
     voice,
   });
-  let audioFile;
+  let audioFile = `${RNFS.TemporaryDirectoryPath.replace(
+    /\/\s*$/,
+    '',
+  )}/${removePunctuation(translation)}.wav`;
   if (data.startsWith('tts')) {
-    audioFile = `https://d204jpj04e0c2r.cloudfront.net/${data}`;
+    const url = `https://d204jpj04e0c2r.cloudfront.net/${data}`;
+    await RNFS.downloadFile({
+      fromUrl: url,
+      toFile: audioFile,
+    });
   } else {
-    audioFile = `${RNFS.TemporaryDirectoryPath}/${translation}.wav`;
     const datab64 = data.replace('data:audio/wav;base64,', '');
     await RNFS.writeFile(audioFile, datab64, 'base64');
   }
