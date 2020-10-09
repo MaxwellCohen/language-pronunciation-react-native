@@ -1,9 +1,9 @@
 /*global SpeechSDK*/
 import AudioRecord from 'react-native-audio-record';
 import {translate} from '../../api/speech';
-import {BinaryFile} from 'react-native-binary-file';
 import RNFS from 'react-native-fs';
 import {loadAudio} from '../../util/sound';
+import toUint8Array from 'base64-to-uint8array';
 
 require('../../node_modules/microsoft-cognitiveservices-speech-sdk/distrib/browser/microsoft.cognitiveservices.speech.sdk.bundle.js');
 
@@ -148,6 +148,7 @@ const sst = async (fileName, token, language, dispatch) => {
         reco.close();
       };
 
+      console.log('SST request start!');
       reco.recognizeOnceAsync(
         () => {},
         (e) => {
@@ -156,23 +157,25 @@ const sst = async (fileName, token, language, dispatch) => {
         },
       );
     } catch (e) {
-      console.error('error', {e});
+      console.error('hi error', {e});
       dispatch(endStt(fileName, {}));
     }
   }
 };
 
 const createConfig = async (fileName) => {
-  try {
-    const fstat = await RNFS.stat(fileName);
-    const fd = await BinaryFile.open(fileName);
-    const blob = await BinaryFile.read(fd, fstat.size - 1);
-    const pushStream = SpeechSDK.AudioInputStream.createPushStream();
-    pushStream.write(blob.buffer);
-    pushStream.close();
-    const audioConfig = SpeechSDK.AudioConfig.fromStreamInput(pushStream);
-    return audioConfig;
-  } catch (e) {
-    console.error(e);
-  }
+  // const fstat = await RNFS.stat(fileName);
+
+  // const fd = await BinaryFile.open(fileName);
+  // const blob = await BinaryFile.read(fd, fstat.size - 1);
+  // console.log({blob: blob.buffer})
+
+  const data = await RNFS.readFile(fileName, 'base64');
+  const blob = toUint8Array(data);
+  console.log({blob});
+  const pushStream = SpeechSDK.AudioInputStream.createPushStream();
+  pushStream.write(blob.buffer);
+  pushStream.close();
+  const audioConfig = SpeechSDK.AudioConfig.fromStreamInput(pushStream);
+  return audioConfig;
 };
