@@ -133,7 +133,6 @@ const sst = async (fileName, token, language, dispatch) => {
       const reco = new SpeechSDK.SpeechRecognizer(speechConfig, audioConfig);
 
       reco.recognized = async (s, e) => {
-        console.log('reconized', s, e);
         const text = e?.result?.text;
         if (text) {
           const {data} = await translate({
@@ -148,7 +147,6 @@ const sst = async (fileName, token, language, dispatch) => {
         reco.close();
       };
 
-      console.log('SST request start!');
       reco.recognizeOnceAsync(
         () => {},
         (e) => {
@@ -172,7 +170,6 @@ const createConfig = async (fileName) => {
 
   const data = await RNFS.readFile(fileName, 'base64');
   const blob = toUint8Array(data);
-  console.log({blob});
   const pushStream = SpeechSDK.AudioInputStream.createPushStream();
   pushStream.write(blob.buffer);
   pushStream.close();
