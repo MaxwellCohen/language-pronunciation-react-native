@@ -7,7 +7,6 @@ import com.facebook.react.ReactApplication;
 import com.reactnativecommunity.picker.RNCPickerPackage;
 import com.zmxv.RNSound.RNSoundPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
-import ez.react.binary.RNBinaryFilePackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
