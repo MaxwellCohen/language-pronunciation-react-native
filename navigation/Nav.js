@@ -49,7 +49,6 @@ const Nav = () => {
     dispatch(permissionActions.checkPermission());
   }, [dispatch]);
 
-  console.log('token', token);
   if (!token) {
     return (
       <View style={styles.container}>
@@ -59,7 +58,6 @@ const Nav = () => {
   }
 
   const setIntialRoute = () => {
-    console.log(voice && userLanguage);
     if (voice && userLanguage) {
       return 'Pronunciation Tool';
     }

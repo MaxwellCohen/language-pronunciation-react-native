@@ -7,12 +7,9 @@ target 'LPT' do
 
   use_react_native!(:path => config["reactNativePath"])
 
-
   permissions_path = '../node_modules/react-native-permissions/ios'
   pod 'Permission-Microphone', :path => "#{permissions_path}/Microphone.podspec"
   pod 'Permission-MediaLibrary', :path => "#{permissions_path}/MediaLibrary.podspec"
-
-
 
   target 'LPTTests' do
     inherit! :complete

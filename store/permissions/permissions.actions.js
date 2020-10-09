@@ -7,7 +7,7 @@ export const checkPermission = () => async (dispatch) => {
   const cameraPermission =
     Platform.OS === 'android'
       ? PERMISSIONS.ANDROID.RECORD_AUDIO
-      : PERMISSIONS.IOS.CAMERA;
+      : PERMISSIONS.IOS.MICROPHONE;
   try {
     const p = await Permissions.check(cameraPermission);
     if (p === 'authorized') {

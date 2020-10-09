@@ -26,7 +26,11 @@ const PlayButton = ({loading, hide, sounds}) => {
       setPlaying(true);
       const sound = sounds[index];
       soundRef.current = sound;
-      promisifyPlaySound(sound).then(() => playSounds(index + 1));
+      promisifyPlaySound(sound)
+        .then(() => playSounds(index + 1))
+        .catch((e) => {
+          console.error('could not play sound', e);
+        });
     } else {
       setPlaying(false);
     }

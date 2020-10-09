@@ -1,7 +1,8 @@
 import {translate, tts} from '../../api/speech';
 import RNFS from 'react-native-fs';
 import {loadAudio} from '../../util/sound';
-import { removePunctuation } from '../../util/removePunctuation';
+import {removePunctuation} from '../../util/removePunctuation';
+import {encode} from 'js-base64'
 
 export const SET_TEXT = 'SET_TEXT';
 export const SET_TRANSLATION = 'SET_TRANSLATION';
@@ -80,37 +81,54 @@ export const updateSound = (voice, translation) => async (
   getState,
 ) => {
   const oFilePath = getState()?.whatToSay?.audioFile ?? '';
-  if (oFilePath.includes(translation)) {
+  if (oFilePath.includes(removePunctuation(translation))) {
     return;
   }
   const lang = voice.split('-').slice(0, 2).join('-');
-  const {data} = await tts({
-    text: translation,
-    lang,
-    voice,
-  });
-  let audioFile = `${RNFS.TemporaryDirectoryPath.replace(
-    /\/\s*$/,
-    '',
-  )}/${removePunctuation(translation)}.wav`;
-  if (data.startsWith('tts')) {
-    const url = `https://d204jpj04e0c2r.cloudfront.net/${data}`;
-    await RNFS.downloadFile({
-      fromUrl: url,
-      toFile: audioFile,
+  try {
+    let {data} = await tts({
+      text: translation,
+      lang,
+      voice,
     });
-  } else {
-    const datab64 = data.replace('data:audio/wav;base64,', '');
+
+    let audioFile = `${RNFS.DocumentDirectoryPath}/${encode(translation)}.wav`;
+
+    if (data.startsWith('tts')) {
+      const url = `https://d204jpj04e0c2r.cloudfront.net/${data}`;
+      const request = await fetch(url);
+      if (!request.ok) {
+        return;
+      }
+      const blob = await request.blob();
+      data = await blobToBase64(blob);
+    }
+
+    const datab64 = data.split(',')[1];
     await RNFS.writeFile(audioFile, datab64, 'base64');
+    const sound = await loadAudio(audioFile);
+
+    dispach({
+      type: SET_SOUND,
+      payload: {
+        sound,
+        audioFile,
+      },
+    });
+  } catch (e) {
+    console.log(e);
   }
+};
 
-  const sound = await loadAudio(audioFile);
-
-  dispach({
-    type: SET_SOUND,
-    payload: {
-      sound,
-      audioFile,
-    },
+const blobToBase64 = (blob) => {
+  // eslint-disable-next-line no-undef
+  const reader = new FileReader();
+  reader.readAsDataURL(blob);
+  return new Promise((resolve, reject) => {
+    reader.onerror = reject;
+    reader.onloadend = () => {
+      resolve(reader.result);
+    };
+    reader.error;
   });
 };

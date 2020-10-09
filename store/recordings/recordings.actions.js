@@ -2,7 +2,7 @@
 import AudioRecord from 'react-native-audio-record';
 import {translate} from '../../api/speech';
 import {BinaryFile} from 'react-native-binary-file';
-import RNFS, {stat} from 'react-native-fs';
+import RNFS from 'react-native-fs';
 import {loadAudio} from '../../util/sound';
 
 require('../../node_modules/microsoft-cognitiveservices-speech-sdk/distrib/browser/microsoft.cognitiveservices.speech.sdk.bundle.js');
@@ -38,7 +38,6 @@ export const clearRecording = () => ({
 });
 
 export const startRecording = () => {
-  console.log('start recording');
   const wavFile = `${new Date().toISOString().replace(/[^\w\s]/gi, '')}.wav`;
   const options = {
     sampleRate: 16000,
@@ -49,7 +48,7 @@ export const startRecording = () => {
 
   AudioRecord.init(options);
   AudioRecord.start();
-
+  AudioRecord.on('data', () => {});
   return {
     type: START_RECORDING,
     payload: {
@@ -66,9 +65,9 @@ export const stopRecording = () => async (dispatch, getState) => {
   if (!recording) {
     return;
   }
-  console.log('stop record');
+
   let audioFile = await AudioRecord.stop();
-  console.log('audioFile', audioFile);
+
   dispatch({
     type: STOP_RECORDING,
     payload: {
@@ -80,7 +79,7 @@ export const stopRecording = () => async (dispatch, getState) => {
   try {
     await sst(audioFile, token, language, dispatch);
   } catch (e) {
-    console.error(e);
+    console.error('sst error', e);
   }
 
   try {
@@ -121,6 +120,7 @@ const sst = async (fileName, token, language, dispatch) => {
     dispatch(startStt(fileName));
     try {
       const audioConfig = await createConfig(fileName);
+
       const speechConfig = SpeechSDK.SpeechConfig.fromAuthorizationToken(
         token,
         'eastus',
@@ -129,8 +129,11 @@ const sst = async (fileName, token, language, dispatch) => {
         .split('-')
         .slice(0, 2)
         .join('-');
+
       const reco = new SpeechSDK.SpeechRecognizer(speechConfig, audioConfig);
+
       reco.recognized = async (s, e) => {
+        console.log('reconized', s, e);
         const text = e?.result?.text;
         if (text) {
           const {data} = await translate({
@@ -148,23 +151,28 @@ const sst = async (fileName, token, language, dispatch) => {
       reco.recognizeOnceAsync(
         () => {},
         (e) => {
+          console.error('error', {e});
           dispatch(endStt(fileName, {}));
-          console.error(e);
         },
       );
     } catch (e) {
+      console.error('error', {e});
       dispatch(endStt(fileName, {}));
     }
   }
 };
 
 const createConfig = async (fileName) => {
-  const fstat = await stat(fileName);
-  const fd = await BinaryFile.open(fileName);
-  const blob = await BinaryFile.read(fd, fstat.size - 1);
-  const pushStream = SpeechSDK.AudioInputStream.createPushStream();
-  pushStream.write(blob.buffer);
-  pushStream.close();
-  const audioConfig = SpeechSDK.AudioConfig.fromStreamInput(pushStream);
-  return audioConfig;
+  try {
+    const fstat = await RNFS.stat(fileName);
+    const fd = await BinaryFile.open(fileName);
+    const blob = await BinaryFile.read(fd, fstat.size - 1);
+    const pushStream = SpeechSDK.AudioInputStream.createPushStream();
+    pushStream.write(blob.buffer);
+    pushStream.close();
+    const audioConfig = SpeechSDK.AudioConfig.fromStreamInput(pushStream);
+    return audioConfig;
+  } catch (e) {
+    console.error(e);
+  }
 };
